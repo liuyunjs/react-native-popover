@@ -39,7 +39,7 @@ export const PopoverMeasure: React.FC<PopoverMeasureProps> = ({
 
     if (!isStatus(Status.Show)) {
       const update = !queue.length;
-      queue.push(() => setStatus(Status.Show, update));
+      queue.unshift(() => setStatus(Status.Show, update));
     }
 
     queue.forEach((cb) => cb());
