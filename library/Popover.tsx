@@ -3,9 +3,9 @@ import { darkly } from 'rn-darkly';
 import { withModal } from 'react-native-smart-modal';
 import { I18nManager, Dimensions } from 'react-native';
 import { isFunction } from '@liuyunjs/utils/lib/isFunction';
-import { PopoverInternal, PopoverInternalProps } from './PopoverInternal';
+import { ModalityPopover, PopoverModalProps } from './ModalityPopover';
 
-export type PopoverProps = Partial<Omit<PopoverInternalProps, 'fromRect'>> & {
+export type PopoverProps = Partial<Omit<PopoverModalProps, 'fromRect'>> & {
   fromRef: React.MutableRefObject<any> | React.RefObject<any>;
 };
 
@@ -14,7 +14,7 @@ const Popover: React.FC<React.PropsWithChildren<PopoverProps>> = ({
   ...rest
 }) => {
   const [rect, setRect] = React.useState<
-    PopoverInternalProps['fromRect'] | undefined
+    PopoverModalProps['fromRect'] | undefined
   >();
 
   React.useLayoutEffect(() => {
@@ -36,7 +36,7 @@ const Popover: React.FC<React.PropsWithChildren<PopoverProps>> = ({
 
   if (!rect) return null;
 
-  return <PopoverInternal {...(rest as any)} fromRect={rect!} />;
+  return <ModalityPopover {...(rest as any)} fromRect={rect!} />;
 };
 
 const DarklyPopover = darkly(

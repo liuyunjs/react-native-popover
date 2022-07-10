@@ -1,5 +1,4 @@
 import { Dimensions } from 'react-native';
-import { isNumber } from '@liuyunjs/utils/lib/isNumber';
 import { Rect, Point, Size } from './geometry';
 
 export type Inset = { top: number; start: number; end: number; bottom: number };
@@ -7,7 +6,8 @@ export type Inset = { top: number; start: number; end: number; bottom: number };
 const { width, height } = Dimensions.get('window');
 
 const getInset = (inset: Inset | number): Inset => {
-  if (isNumber(inset)) {
+  'worklet';
+  if (typeof inset === 'number') {
     return {
       start: inset,
       bottom: inset,
@@ -19,6 +19,7 @@ const getInset = (inset: Inset | number): Inset => {
 };
 
 export const getArea = (insetInput: Inset | number): Rect => {
+  'worklet';
   const inset = getInset(insetInput);
   return [
     inset.start,
@@ -33,6 +34,7 @@ export const getTranslateOrigin = (
   origin: Point,
   anchor: Point,
 ): Point => {
+  'worklet';
   const popoverCenter: Point = [
     origin[0] + contentSize[1] / 2,
     origin[1] + contentSize[1] / 2,

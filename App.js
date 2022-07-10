@@ -2,18 +2,19 @@ import React from 'react';
 import { SafeAreaView, Text, View, I18nManager } from 'react-native';
 import { LegacyPopover, Popover } from './library/main';
 
-I18nManager.forceRTL(true);
+I18nManager.forceRTL(false);
 
 export default function App() {
   const ref = React.useRef();
   const ref2 = React.useRef();
+  const ref3 = React.useRef();
   const [visible, setVisible] = React.useState(false);
 
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        alignItems: 'flex-start',
+        alignItems: 'center',
         justifyContent: 'flex-start',
       }}>
       <Text
@@ -32,7 +33,7 @@ export default function App() {
       <Popover
         fromRef={ref}
         visible={visible}
-        onWillChange={setVisible}
+        onChange={setVisible}
         placement="bottom"
         containerStyle={{ zIndex: 500 }}
         inset={{ top: 54, bottom: 44, start: 10, end: 10 }}>
@@ -44,6 +45,7 @@ export default function App() {
         placement="bottom"
         builder={() => <View style={{ width: 100, height: 100 }} />}>
         <Text
+          ref={ref3}
           disabled
           style={{
             top: 100,
@@ -61,14 +63,14 @@ export default function App() {
           Popover.show({
             forceDark: true,
             fromRef: ref2,
-            children: <View style={{ width: 100, height: 100 }} />,
+            children: <View style={{ width: 130, height: 100 }} />,
             containerStyle: { zIndex: 500 },
             inset: { top: 54, bottom: 44, start: 10, end: 10 },
             placement: 'auto',
           });
         }}
         style={{
-          top: 100,
+          // top: 100,
           fontSize: 24,
           backgroundColor: 'red',
         }}>
