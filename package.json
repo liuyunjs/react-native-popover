@@ -1,6 +1,6 @@
 {
   "name": "react-native-repopover",
-  "version": "2.0.0-beta1",
+  "version": "2.0.0-beta2",
   "private": false,
   "main": "dist/main.js",
   "types": "dist/main.d.ts",

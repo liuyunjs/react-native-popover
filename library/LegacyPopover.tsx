@@ -52,7 +52,7 @@ export const LegacyPopover: React.FC<
         <Popover
           {...(rest as any)}
           visible={visible}
-          onWillChange={setVisible}
+          onChange={setVisible}
           fromRef={fromRef}>
           {builder()}
         </Popover>
