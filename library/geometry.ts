@@ -174,7 +174,7 @@ const computeAutoGeometry = (
   arrowSize: Size,
 ): Geometry => {
   let geom: Geometry | null = null;
-  const placements: Placement[] = ['start', 'end', 'top', 'bottom'];
+  const placements: Placement[] = ['top', 'end', 'bottom', 'end'];
 
   for (let i = 0; i < 4; i += 1) {
     const placement = placements[i];
@@ -185,11 +185,9 @@ const computeAutoGeometry = (
       displayArea,
       arrowSize,
     );
-    const { origin, arrow } = geom;
+    const { origin } = geom;
 
-    if (
-      inDisplayRect(displayArea, contentSize, arrowSize, origin, arrow.origin)
-    ) {
+    if (inDisplayRect(displayArea, contentSize, origin)) {
       break;
     }
   }
@@ -197,13 +195,7 @@ const computeAutoGeometry = (
   return geom!;
 };
 
-const inDisplayRect = (
-  displayArea: Rect,
-  contentSize: Size,
-  arrowSize: Size,
-  origin: Point,
-  arrowOrigin: Point,
-) => {
+const inDisplayRect = (displayArea: Rect, contentSize: Size, origin: Point) => {
   return [0, 1].reduce((previousValue, currentValue) => {
     const max =
       displayArea[currentValue] +
@@ -211,9 +203,8 @@ const inDisplayRect = (
       contentSize[currentValue];
     const min = displayArea[currentValue];
     const curr = origin[currentValue];
-    const arrowOffset = arrowOrigin[currentValue];
 
-    return previousValue && max >= curr && min <= curr && arrowOffset >= 0;
+    return previousValue && max >= curr && min <= curr;
   }, true);
 };
 

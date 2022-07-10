@@ -1,18 +1,44 @@
 import React from 'react';
 import { SafeAreaView, Text, View, I18nManager } from 'react-native';
-import { Popover } from './library/main';
+import { LegacyPopover, Popover } from './library/main';
 
-I18nManager.forceRTL(false);
+I18nManager.forceRTL(true);
 
 export default function App() {
+  const ref = React.useRef();
+  const ref2 = React.useRef();
+  const [visible, setVisible] = React.useState(false);
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'flex-start',
       }}>
+      <Text
+        ref={ref}
+        onPress={() => {
+          setVisible(!visible);
+        }}
+        style={{
+          top: 100,
+          fontSize: 24,
+          // margin: 100,
+          backgroundColor: 'red',
+        }}>
+        Popover
+      </Text>
       <Popover
+        fromRef={ref}
+        visible={visible}
+        onWillChange={setVisible}
+        placement="bottom"
+        containerStyle={{ zIndex: 500 }}
+        inset={{ top: 54, bottom: 44, start: 10, end: 10 }}>
+        <View style={{ width: 100, height: 100 }} />
+      </Popover>
+      <LegacyPopover
         containerStyle={{ zIndex: 500 }}
         inset={{ top: 54, bottom: 44, start: 10, end: 10 }}
         placement="bottom"
@@ -25,9 +51,29 @@ export default function App() {
             // margin: 100,
             backgroundColor: 'red',
           }}>
-          Popover
+          Popover2
         </Text>
-      </Popover>
+      </LegacyPopover>
+
+      <Text
+        ref={ref2}
+        onPress={() => {
+          Popover.show({
+            forceDark: true,
+            fromRef: ref2,
+            children: <View style={{ width: 100, height: 100 }} />,
+            containerStyle: { zIndex: 500 },
+            inset: { top: 54, bottom: 44, start: 10, end: 10 },
+            placement: 'auto',
+          });
+        }}
+        style={{
+          top: 100,
+          fontSize: 24,
+          backgroundColor: 'red',
+        }}>
+        Popover3
+      </Text>
     </SafeAreaView>
   );
 }

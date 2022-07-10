@@ -1,58 +1,30 @@
-import React from 'react';
-import { LayoutChangeEvent, View } from 'react-native';
+import * as React from 'react';
+import { ColorValue, LayoutChangeEvent, View } from 'react-native';
 import { styles } from './styles';
-import { Status } from './useStatusHelper';
 import { Size } from './geometry';
 
 type PopoverMeasureProps = {
-  isStatus: (status: number) => boolean;
-  measure?: Size;
   setMeasure: React.Dispatch<React.SetStateAction<Size | undefined>>;
-  setStatus: (status: number, update?: boolean) => void;
-  isDark: boolean;
+  measured: boolean;
+  backgroundColor: ColorValue;
 };
 
-export const PopoverMeasure: React.FC<PopoverMeasureProps> = ({
-  measure,
-  setMeasure,
-  setStatus,
-  children,
-  isStatus,
-  isDark,
-}) => {
+export const PopoverMeasure: React.FC<
+  React.PropsWithChildren<PopoverMeasureProps>
+> = ({ setMeasure, children, measured, backgroundColor }) => {
   const onLayout = (e: LayoutChangeEvent) => {
     const { layout } = e.nativeEvent;
-    const newMeasure: Size = [
-      Math.round(layout.width),
-      Math.round(layout.height),
-    ];
-
-    const queue: (() => void)[] = [];
-
-    if (
-      !measure ||
-      measure[0] !== newMeasure[0] ||
-      measure[1] !== newMeasure[1]
-    ) {
-      queue.push(() => setMeasure(newMeasure));
-    }
-
-    if (!isStatus(Status.Show)) {
-      const update = !queue.length;
-      queue.unshift(() => setStatus(Status.Show, update));
-    }
-
-    queue.forEach((cb) => cb());
+    setMeasure([Math.round(layout.width), Math.round(layout.height)]);
   };
 
   return (
     <View
-      onLayout={onLayout}
-      pointerEvents={isStatus(Status.Show) ? 'auto' : 'none'}
+      onLayout={measured ? undefined : onLayout}
+      pointerEvents={measured ? 'auto' : 'none'}
       style={[
         styles.content,
-        isDark && styles.darkContent,
-        isStatus(Status.Measure) && styles.measure,
+        { backgroundColor },
+        !measured && styles.measure,
       ]}>
       {children}
     </View>

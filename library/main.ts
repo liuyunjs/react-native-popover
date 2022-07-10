@@ -1,3 +1,4 @@
 import 'react-native-smart-modal';
 
-export { Popover } from './Popover';
+export * from './Popover';
+export * from './LegacyPopover';

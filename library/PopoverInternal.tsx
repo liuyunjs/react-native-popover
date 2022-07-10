@@ -1,61 +1,36 @@
-import React from 'react';
-import { useColorScheme } from 'react-native';
+import * as React from 'react';
 import { Size, Rect } from './geometry';
-import { useStatusHelper, Status } from './useStatusHelper';
 import { PopoverMeasure } from './PopoverMeasure';
-import { PopoverModal, PopoverModalProps } from './PopoverModal';
+import { ModalityPopover, PopoverModalProps } from './ModalityPopover';
 
-export type PopoverInternalProps = Omit<
-  PopoverModalProps,
-  'status' | 'measure' | 'fromRect' | 'is'
-> & {
-  builder: () => React.ReactNode;
+export type PopoverInternalProps = PopoverModalProps & {
   fromRect: Rect;
 };
 
-export const PopoverInternal: React.FC<PopoverInternalProps> = ({
-  builder,
-  visible,
-  ...rest
-}) => {
-  const isDark = useColorScheme?.() === 'dark';
+export const PopoverInternal: React.FC<
+  React.PropsWithChildren<PopoverInternalProps>
+> = ({ children, ...rest }) => {
   const [measure, setMeasure] = React.useState<Size>();
-  const [isStatus, setStatus] = useStatusHelper();
-
-  React.useMemo(() => {
-    if (visible) {
-      setStatus(Status.Measure);
-    } else if (!isStatus(Status.Initial)) {
-      setStatus(Status.Hide);
-    }
-  }, [visible]);
-
-  if (isStatus(Status.Initial)) return null;
-  let elem = builder() as React.ReactElement;
+  const measured = !!measure;
+  let elem = children as React.ReactElement;
   if (!elem) return null;
 
   elem = (
     <PopoverMeasure
-      isDark={isDark}
-      isStatus={isStatus}
-      setStatus={setStatus}
-      measure={measure}
+      backgroundColor={rest.backgroundColor}
+      measured={measured}
       setMeasure={setMeasure}>
       {elem}
     </PopoverMeasure>
   );
 
-  if (isStatus(Status.Measure)) {
+  if (!measured) {
     return elem;
   }
 
   return (
-    <PopoverModal
-      {...rest}
-      isDark={isDark}
-      visible={isStatus(Status.Show)}
-      measure={measure!}>
+    <ModalityPopover {...rest} measure={measure!}>
       {elem}
-    </PopoverModal>
+    </ModalityPopover>
   );
 };

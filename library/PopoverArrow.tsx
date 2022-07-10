@@ -1,7 +1,7 @@
+import { ColorValue, I18nManager, View } from 'react-native';
+import * as React from 'react';
+import type { Placement, Point, Size } from './geometry';
 import { styles } from './styles';
-import { I18nManager, View } from 'react-native';
-import React from 'react';
-import { Placement, Point, Size } from './geometry';
 
 const ARROW_DEG: { [index in Placement]: string } = {
   bottom: '-180deg',
@@ -14,14 +14,14 @@ export type PopoverArrowProps = {
   origin: Point;
   measure: Size;
   placement: Placement;
-  isDark: boolean;
+  backgroundColor: ColorValue;
 };
 
 export const PopoverArrow: React.FC<PopoverArrowProps> = ({
   origin,
   measure,
   placement,
-  isDark,
+  backgroundColor,
 }) => {
   const [width, height] = measure;
 
@@ -29,8 +29,8 @@ export const PopoverArrow: React.FC<PopoverArrowProps> = ({
     <View
       style={[
         styles.arrow,
-        isDark && styles.darkArrow,
         {
+          borderTopColor: backgroundColor,
           width,
           height,
           borderTopWidth: height / 2,
